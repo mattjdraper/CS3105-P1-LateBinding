@@ -173,6 +173,8 @@ public class LBSMain {
 			int movesToWin = workingList.get(0);
 			workingList.remove(0);
 
+			if(layout.numPiles() == 1){System.out.println("true");return;}
+
 			while (count != movesToWin){
 
 				int card = workingList.get(0);
@@ -195,15 +197,13 @@ public class LBSMain {
 				}
 				else{
 					System.out.println("false");
+					layout.print();
 					return;
 				}
 			}
-			// All moves of the proposed LBS solution are valid. Double check the solution yields one pile.
-			if(layout.numPiles() != 1){
-				System.out.print("false");
-				return;
-			}
+			// All moves of the proposed LBS solution are valid.
 			System.out.println("true");
+			layout.print();
 			stdInScanner.close();
 			return;
 
