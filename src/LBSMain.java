@@ -135,7 +135,6 @@ public class LBSMain {
 			return;
 
 		case "CHECK":
-			System.out.println("CHECK FUNCTION ACCESSED:\n");
 
 			if (args.length < 2 || 
 			    ( args[1].equals("-") && args.length < 3) || 
