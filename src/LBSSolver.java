@@ -56,7 +56,7 @@ public class LBSSolver {
     }
 
     public boolean easyFail(LBSLayout startingLayout, ArrayList<Integer> startingList){
-        if(startingList.size() == 0){
+        if(startingList.isEmpty()){
             return true;
         }
         else{

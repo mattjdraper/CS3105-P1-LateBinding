@@ -182,7 +182,7 @@ public class LBSMain {
 
 			// Handle edge cases that pass, to be improved.
 			if(solver.easyPass(layout, workingList)){
-				System.out.println("false");
+				System.out.println("true");
 				return;
 			}
 			// Handle edge cases that fail, to be improved
