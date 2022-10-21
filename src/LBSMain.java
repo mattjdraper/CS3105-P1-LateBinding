@@ -163,15 +163,22 @@ public class LBSMain {
 
 			// Instantiate a solver object to access functions regarding the solving of the LBS game
 			solver = new LBSSolver();
+
+			// Temp storage for testing outputs
 			ArrayList<Integer> originalLayout = layout.copyLayout();
 			ArrayList<Integer> originalWorkingList = new ArrayList<>(workingList);
+
 			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
 			int count = 0;
 			// Read the first digit of the proposed solution, the stated number of moves to complete
 			int movesToWin = workingList.get(0);
 			workingList.remove(0);
 
-			if(layout.numPiles() == 1){System.out.println("true");return;}
+			// Handle edge case, any instance where there is a single pile size is solvable.
+			if(layout.numPiles() == 1 && movesToWin == 1){
+				System.out.println("true");
+				return;
+			}
 
 			while (count != movesToWin){
 
@@ -182,7 +189,8 @@ public class LBSMain {
 
 				// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
 				// Also ensure that the suggested card to move by solution exists in the game layout. If it does not, cardPosition = -1 invokes failure.
-				if((solver.sameSuit(card,pileCard,layout.numRanks()) || solver.sameRank(card,pileCard,layout.numRanks())) && cardPosition != -1){
+				if((solver.sameSuit(card,pileCard,layout.numRanks()) || solver.sameRank(card,pileCard,layout.numRanks()))
+					&& solver.validMove(cardPosition,pile)){
 					// Place the subject card onto the target pile if a valid move.
 					layout.movePiles(pile,card);
 					// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.
@@ -205,7 +213,6 @@ public class LBSMain {
 			System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
 			System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString());
 
-			//layout.print();
 			stdInScanner.close();
 			return;
 

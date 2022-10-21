@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.lang.Math;
 
 // LBSChecker by 200004184, 20/10/2022-XX/10/2022
 //
@@ -40,4 +41,12 @@ public class LBSSolver {
         }
     }
     //
+    public boolean validMove(int pile1_location, int pile2_location){
+        if(Math.abs(pile1_location - pile2_location) == 1 || Math.abs(pile1_location - pile2_location) == 3){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
