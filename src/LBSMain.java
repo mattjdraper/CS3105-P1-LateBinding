@@ -164,16 +164,6 @@ public class LBSMain {
 			// [2]:
 			// [3]:
 			// //
-			//
-
-			// Test Outputs to console.
-			System.out.println("\nLAYOUT & SOLUTION LOADED:");
-			System.out.printf("LAYOUT: "); layout.print();
-			System.out.printf("\nSOLUTION: " + workingList);
-			System.out.printf("\nDECK SIZE: " + layout.cardsInDeck());
-			System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
-			System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			System.out.printf("\nPILES: "+ Integer.toString(layout.numPiles())+ "\n");
 
 			// Instantiate a solver object to access functions regarding the solving of the LBS game
 			solver = new LBSSolver();
@@ -187,12 +177,9 @@ public class LBSMain {
 			while (count != movesToWin){
 
 				int card = workingList.get(0);
-				System.out.printf("\nCARD: "+Integer.toString(card));
 				int cardPosition = layout.cardPosition(card);
 				int pile = workingList.get(1);
-				System.out.printf("\nPILE: "+Integer.toString(pile));
 				int pileCard = layout.cardAt(pile);
-				System.out.printf("\nTOP OF PILE: "+Integer.toString(pileCard) + "\n");
 
 				// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
 				// Also ensure that the suggested card to move by solution exists in the game layout. If it does not, cardPosition = -1 invokes failure.
@@ -211,10 +198,8 @@ public class LBSMain {
 					System.out.println("false");
 					return;
 				}
-				// All moved of the proposed LBS solution are valid. Double check final solution and output 'true'.
-				System.out.printf("END OF MOVE: "); layout.print();
 			}
-			System.out.printf("END OF SOLUTION: "); layout.print();
+			// All moves of the proposed LBS solution are valid. Output 'true'.
 			System.out.println("true");
 			stdInScanner.close();
 			return;
