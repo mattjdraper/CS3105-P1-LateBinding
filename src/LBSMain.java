@@ -215,8 +215,6 @@ public class LBSMain {
 				}
 				else{
 					System.out.println("false");
-					System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
-					System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString());
 					return;
 				}
 			}

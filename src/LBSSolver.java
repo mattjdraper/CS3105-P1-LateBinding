@@ -47,14 +47,21 @@ public class LBSSolver {
     }
 
     public boolean easyPass(LBSLayout startingLayout, ArrayList<Integer> startingList){
-        return false;
+        if (startingLayout.numPiles() == 1 && startingList.get(0) == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public boolean easyFail(LBSLayout startingLayout, ArrayList<Integer> startingList){
         if(startingList.size() == 0){
             return true;
         }
-        else{return false;}
+        else{
+            return false;
+        }
     }
 
 }
