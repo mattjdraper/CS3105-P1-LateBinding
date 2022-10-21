@@ -8,8 +8,7 @@ import java.util.Scanner;
 // Starter by Ian Gent, Oct 2022
 // 
 // // This class is provided to save you writing some of the basic parts of the code
-// // Also to provide a uniform layout generator
-//
+// // Also to provide a uniform layout generator//
 // // You may freely edit this code if you wish, e.g. adding methods to it. 
 // // Obviously we are aware the starting point is provided so there is no need to explicitly credit us
 // // Please clearly mark any new code that you have added/changed to make finding new bits easier for us
@@ -33,8 +32,28 @@ public class LBSLayout {
     public int numPiles() { 
         return layout.size();
     }
+
     public int cardsInDeck() { 
         return numranks * numsuits; 
+    }
+
+    // My Code - to be annotated and commented once working!
+    public void removePile(int pileIndex){
+        layout.remove(pileIndex);
+    }
+
+    public void movePiles(int pile1, int pile2){
+        layout.set(pile1,pile2);
+    }
+
+    public int cardPosition(int card){
+        try {
+            int position = layout.indexOf(card);
+            return position;
+        }
+        catch(Exception e) {
+            return -1;
+        }
     }
 
     public int cardAt(int pile) { 
@@ -101,13 +120,9 @@ public class LBSLayout {
 	}
 
 
-    
-
 
 // Helper function for constructors 
 //
-
-
     private void createLayout() { 
         this.layout = new ArrayList<Integer>(0);
     }
@@ -115,7 +130,6 @@ public class LBSLayout {
     //
     //// Variety of Constructors
     //
-	
 
     // create empty problem for standard deck 
     
@@ -130,8 +144,6 @@ public class LBSLayout {
         this.numsuits = suits;
         createLayout();
 	}
-
-
 
     public LBSLayout(ArrayList<Integer> integers) { 
 		Iterator<Integer> reader = integers.iterator();
@@ -152,7 +164,6 @@ public class LBSLayout {
 
     // Copy Constructor
     //
-    
     public LBSLayout(LBSLayout old) { 
         this.numranks = old.numRanks();
         this.numsuits = old.numSuits();

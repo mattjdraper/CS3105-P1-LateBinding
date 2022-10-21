@@ -78,6 +78,7 @@ public class LBSMain {
 	ArrayList<Integer> workingList;
 
         LBSLayout layout;
+        LBSSolver solver;
 
         int seed ;
         int ranks ;
@@ -164,16 +165,57 @@ public class LBSMain {
 			// [3]:
 			// //
 			//
+
+			// Test Outputs to console.
 			System.out.println("\nLAYOUT & SOLUTION LOADED:");
 			System.out.printf("LAYOUT: "); layout.print();
 			System.out.printf("\nSOLUTION: " + workingList);
 			System.out.printf("\nDECK SIZE: " + layout.cardsInDeck());
 			System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
 			System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			System.out.printf("\nPILES: "+ Integer.toString(layout.numPiles()));
+			System.out.printf("\nPILES: "+ Integer.toString(layout.numPiles())+ "\n");
 
+			// Instantiate a solver object to access functions regarding the solving of the LBS game
+			solver = new LBSSolver();
 
+			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
+			int count = 0;
+			// Read the first digit of the proposed solution, the stated number of moves to complete
+			int movesToWin = workingList.get(0);
+			workingList.remove(0);
 
+			while (count != movesToWin){
+
+				int card = workingList.get(0);
+				System.out.printf("\nCARD: "+Integer.toString(card));
+				int cardPosition = layout.cardPosition(card);
+				int pile = workingList.get(1);
+				System.out.printf("\nPILE: "+Integer.toString(pile));
+				int pileCard = layout.cardAt(pile);
+				System.out.printf("\nTOP OF PILE: "+Integer.toString(pileCard) + "\n");
+
+				// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
+				// Also ensure that the suggested card to move by solution exists in the game layout. If it does not, cardPosition = -1 invokes failure.
+				if((solver.sameSuit(card,pileCard,layout.numRanks()) || solver.sameRank(card,pileCard,layout.numRanks())) && cardPosition != -1){
+					// Place the subject card onto the target pile if a valid move.
+					layout.movePiles(pile,card);
+					// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.
+					layout.removePile(cardPosition);
+					// Remove the completed move instructions from the solution queue, next attempted move now scheduled at array positions 0/1
+					workingList.remove(0);
+					workingList.remove(0);
+					// Increment the counter and continue the proposed solution.
+					count++;
+				}
+				else{
+					System.out.println("false");
+					return;
+				}
+				// All moved of the proposed LBS solution are valid. Double check final solution and output 'true'.
+				System.out.printf("END OF MOVE: "); layout.print();
+			}
+			System.out.printf("END OF SOLUTION: "); layout.print();
+			System.out.println("true");
 			stdInScanner.close();
 			return;
 
