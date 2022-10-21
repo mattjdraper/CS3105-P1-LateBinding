@@ -197,13 +197,13 @@ public class LBSMain {
 				}
 				else{
 					System.out.println("false");
-					layout.print();
+					//layout.print();
 					return;
 				}
 			}
 			// All moves of the proposed LBS solution are valid.
 			System.out.println("true");
-			layout.print();
+			//layout.print();
 			stdInScanner.close();
 			return;
 
