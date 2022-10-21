@@ -9,7 +9,6 @@ import java.lang.Math;
 
 public class LBSSolver {
 
-
     protected int moves;
     protected ArrayList<Integer> solution;
 
@@ -18,11 +17,6 @@ public class LBSSolver {
         this.moves = 0;
     }
 
-    //
-    public void tester(){
-        System.out.println("test");
-    }
-    //
     public boolean sameSuit(int card1, int card2, int noRanks){
         if( card1 / noRanks == card2 / noRanks) {
             return true;
@@ -31,7 +25,8 @@ public class LBSSolver {
             return false;
         }
     }
-    //
+
+
     public boolean sameRank(int card1, int card2, int noRanks){
         if (card1 % noRanks == card2 % noRanks) {
             return true;
@@ -40,7 +35,8 @@ public class LBSSolver {
             return false;
         }
     }
-    //
+
+
     public boolean validMove(int pile1_location, int pile2_location){
         if(Math.abs(pile1_location - pile2_location) == 1 || Math.abs(pile1_location - pile2_location) == 3){
             return true;
@@ -49,4 +45,16 @@ public class LBSSolver {
             return false;
         }
     }
+
+    public boolean easyPass(LBSLayout startingLayout, ArrayList<Integer> startingList){
+        return false;
+    }
+
+    public boolean easyFail(LBSLayout startingLayout, ArrayList<Integer> startingList){
+        if(startingList.size() == 0){
+            return true;
+        }
+        else{return false;}
+    }
+
 }
