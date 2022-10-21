@@ -198,7 +198,11 @@ public class LBSMain {
 					return;
 				}
 			}
-			// All moves of the proposed LBS solution are valid. Output 'true'.
+			// All moves of the proposed LBS solution are valid. Double check the solution yields one pile.
+			if(layout.numPiles() != 1){
+				System.out.print("false");
+				return;
+			}
 			System.out.println("true");
 			stdInScanner.close();
 			return;
