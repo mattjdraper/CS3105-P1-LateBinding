@@ -60,7 +60,6 @@ public class LBSMain {
 	return new ArrayList<Integer>(0);
 	
         }
-        
 
       public static ArrayList<Integer> readIntArray(Scanner reader) {
 	  ArrayList<Integer> result = new ArrayList<Integer>(0);
@@ -89,9 +88,6 @@ public class LBSMain {
 
 
 	switch (args[0].toUpperCase()) {
-            //
-            // Add additional commands if you wish for your own testing/evaluation
-            //
 
 		case "GEN":
 			if(args.length < 2) { printUsage(); return; };
@@ -121,6 +117,7 @@ public class LBSMain {
 			return;
 
 		case "GRACESOLVE":
+
 		case "SOLVEGRACE":
 			if (args.length<2 || args[1].equals("-")) {
 				layout = new LBSLayout(readIntArray(stdInScanner));
@@ -166,7 +163,8 @@ public class LBSMain {
 
 			// Instantiate a solver object to access functions regarding the solving of the LBS game
 			solver = new LBSSolver();
-
+			ArrayList<Integer> originalLayout = layout.copyLayout();
+			ArrayList<Integer> originalWorkingList = new ArrayList<>(workingList);
 			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
 			int count = 0;
 			// Read the first digit of the proposed solution, the stated number of moves to complete
@@ -197,17 +195,22 @@ public class LBSMain {
 				}
 				else{
 					System.out.println("false");
-					//layout.print();
+					System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
+					System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString());
 					return;
 				}
 			}
 			// All moves of the proposed LBS solution are valid.
 			System.out.println("true");
+			System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
+			System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString());
+
 			//layout.print();
 			stdInScanner.close();
 			return;
 
 		case "GRACECHECK":
+
 		case "CHECKGRACE":
 			if (args.length < 2 || 
 			    ( args[1].equals("-") && args.length < 3) || 
@@ -227,7 +230,7 @@ public class LBSMain {
 				workingList = readIntArray(args[2]);
 			}
 
-                        // YOUR CODE HERE
+			// YOUR CODE HERE
                         
 			stdInScanner.close();
 			return;
