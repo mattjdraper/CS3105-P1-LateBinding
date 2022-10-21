@@ -9,13 +9,20 @@ import java.io.FileNotFoundException;
 // // Including methods to determine validity of moves, ...
 //
 
-public class LBSChecker {
+public class LBSSolver {
     //
-    public static boolean validMove(){
+    public void tester(){
         System.out.println("test");
     }
     //
-    public static void main(String[] args){
-        validMove();
+    public boolean sameSuit(int card1, int card2, int noSuits){
+        if( card1/noSuits == card2/noSuits){return true;}
+        else{return false;}
     }
+    //
+    public boolean sameRank(int card1, int card2, int noRanks){
+        if( card1%noRanks == card2%noRanks){return true;}
+        else{return false;}
+    }
+    //
 }

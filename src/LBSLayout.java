@@ -94,7 +94,6 @@ public class LBSLayout {
 
 	public void print() {
 
-		System.out.println(numRanks() + " " + numSuits() + " " + numPiles());
         for (int i=0; i < numPiles() ; i++) { 
                 System.out.print(layout.get(i)+" ");
             }

@@ -18,6 +18,11 @@ import java.io.FileNotFoundException;
 //
 //
 
+// LBSMain implementation by 200004184, 21/10/22-XX/10/22
+//
+// // Late Binding Solitaire Methods of CHECK, SOLVE, GRACECHECK constructed within the starter code provided
+// // References used within each function stated within source code.
+//
 
 public class LBSMain {
 
@@ -129,6 +134,8 @@ public class LBSMain {
 			return;
 
 		case "CHECK":
+			System.out.println("CHECK FUNCTION ACCESSED:\n");
+
 			if (args.length < 2 || 
 			    ( args[1].equals("-") && args.length < 3) || 
 			    ( args[1].equals("-") && args[2].equals("-"))
@@ -147,8 +154,26 @@ public class LBSMain {
 				workingList = readIntArray(args[2]);
 			}
 
-                        // YOUR CODE HERE
-                        
+			// 200004184 CHECK Implementation
+			//
+			// // Given a LBS game layout, test whether a proposed solution on input stream results in solved game
+			//
+			// // REFERENCES:
+			// [1]:
+			// [2]:
+			// [3]:
+			// //
+			//
+			System.out.println("\nLAYOUT & SOLUTION LOADED:");
+			System.out.printf("LAYOUT: "); layout.print();
+			System.out.printf("\nSOLUTION: " + workingList);
+			System.out.printf("\nDECK SIZE: " + layout.cardsInDeck());
+			System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
+			System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
+			System.out.printf("\nPILES: "+ Integer.toString(layout.numPiles()));
+
+
+
 			stdInScanner.close();
 			return;
 
