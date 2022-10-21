@@ -180,14 +180,15 @@ public class LBSMain {
 			int movesToWin = workingList.get(0);
 			workingList.remove(0);
 
-			// Handle edge cases that pass, to be improved.
-			if(solver.easyPass(layout, workingList)){
-				System.out.println("true");
-				return;
-			}
 			// Handle edge cases that fail, to be improved
 			if(solver.easyFail(layout, workingList)){
 				System.out.println("false");
+				return;
+			}
+
+			// Handle edge cases that pass, to be improved.
+			if(solver.easyPass(layout, workingList)){
+				System.out.println("true");
 				return;
 			}
 
