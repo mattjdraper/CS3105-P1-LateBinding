@@ -167,6 +167,8 @@ public class LBSMain {
 			// Temp storage for testing outputs
 			ArrayList<Integer> originalLayout = layout.copyLayout();
 			ArrayList<Integer> originalWorkingList = new ArrayList<>(workingList);
+			System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
+			System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString());
 
 			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
 			int count = 0;
@@ -210,8 +212,6 @@ public class LBSMain {
 			}
 			// All moves of the proposed LBS solution are valid.
 			System.out.println("true");
-			System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
-			System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString());
 
 			stdInScanner.close();
 			return;
