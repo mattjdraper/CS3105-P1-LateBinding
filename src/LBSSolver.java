@@ -56,11 +56,14 @@ public class LBSSolver {
         }
     }
 
-    public boolean invalidSetup(LBSLayout startingLayout, ArrayList<Integer> startingList){
-        if(startingList.isEmpty() || startingLayout.numPiles() == 0){
+    public boolean invalidSetup(LBSLayout startingLayout, ArrayList<Integer> startingSolution){
+        if(startingSolution.isEmpty() || startingLayout.numPiles() == 0){
             return true;
         }
-        else if (startingList.size() != 2*startingLayout.numPiles()-1){
+        else if (startingSolution.size() != 2*startingLayout.numPiles()-1){
+            return true;
+        }
+        else if (startingLayout.numPiles()-1 != startingSolution.get(0)){
             return true;
         }
         else{

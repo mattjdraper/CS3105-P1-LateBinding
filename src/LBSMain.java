@@ -167,11 +167,11 @@ public class LBSMain {
 			solver = new LBSSolver();
 
 			// Temp storage for testing outputs
-			 System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
-			 System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			 System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
-			 System.out.printf("\nLBS LAYOUT: "); layout.print();
-			 System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
+			// System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
+			// System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
+			// System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
+			// System.out.printf("\nLBS LAYOUT: "); layout.print();
+			// System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
 			// Handle edge cases that fail, to be improved
 			if(solver.invalidSetup(layout, workingList) == true){
@@ -185,6 +185,7 @@ public class LBSMain {
 			// Extract the first digit of the proposed solution, the stated number of moves to complete.
 			int movesToWin = workingList.get(0);
 			workingList.remove(0);
+
 
 			while (count != movesToWin){
 				int card = workingList.get(0);
