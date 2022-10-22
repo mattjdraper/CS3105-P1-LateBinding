@@ -167,11 +167,11 @@ public class LBSMain {
 			solver = new LBSSolver();
 
 			// Temp storage for testing outputs
-			 System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
-			 System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			 System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
-			 System.out.printf("\nLBS LAYOUT: "); layout.print();
-			 System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
+			// System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
+			// System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
+			// System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
+			// System.out.printf("\nLBS LAYOUT: "); layout.print();
+			// System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
 			// Handle edge cases that fail, to be improved
 			if(solver.easyFail(layout, workingList)){
@@ -187,7 +187,6 @@ public class LBSMain {
 			workingList.remove(0);
 
 			while (count != movesToWin){
-
 				int card = workingList.get(0);
 				int cardPosition = layout.cardPosition(card);
 				int pile = workingList.get(1);
@@ -196,7 +195,7 @@ public class LBSMain {
 				// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
 				// Also ensure that the suggested move is one or three piles away.
 				if((solver.sameSuit(card,pileCard,layout.numRanks()) || solver.sameRank(card,pileCard,layout.numRanks()))
-					&& solver.validMove(cardPosition,pile)){
+					&& solver.validMove(cardPosition,pile) && solver.validCards(card,cardPosition,pile,pileCard)){
 					// Place the subject card onto the target pile if a valid move.
 					layout.movePiles(pile,card);
 					// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.

@@ -46,6 +46,15 @@ public class LBSSolver {
         }
     }
 
+    public boolean validCards(int card, int cardPosition,int pile,int pileCard){
+        if (card < 0 || cardPosition < 0 || pile < 0  || pileCard < 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
     public boolean easyPass(LBSLayout startingLayout, ArrayList<Integer> startingList){
         if (!startingList.isEmpty() && startingLayout.numPiles() == 1) {
             return true;
@@ -60,6 +69,12 @@ public class LBSSolver {
             return true;
         }
         else if (startingLayout.numPiles() == 1 && startingList.get(0) != 0){
+            return true;
+        }
+        else if (startingList.size() % 2 != 0){
+            return true;
+        }
+        else if (startingList.size() != 2*startingLayout.numPiles()+1){
             return true;
         }
         else{
