@@ -65,13 +65,14 @@ public class LBSSolver {
     }
 
     public boolean easyFail(LBSLayout startingLayout, ArrayList<Integer> startingList){
+        //System.out.println(Integer.toString(startingLayout.numPiles()) + Integer.toString(startingList.size()));
         if(startingList.isEmpty() || startingLayout.numPiles() == 0){
             return true;
         }
         else if (startingLayout.numPiles() == 1 && startingList.get(0) != 0){
             return true;
         }
-        else if (startingList.size() != 2*startingLayout.numPiles()+1){
+        else if (startingList.size() != 2*startingLayout.numPiles()){
             return true;
         }
         else{
