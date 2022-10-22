@@ -167,17 +167,12 @@ public class LBSMain {
 			solver = new LBSSolver();
 
 			// Temp storage for testing outputs
-			// System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
-			// System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			// System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
-			// System.out.printf("\nLBS LAYOUT: "); layout.print();
-			// System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
+			 System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
+			 System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
+			 System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
+			 System.out.printf("\nLBS LAYOUT: "); layout.print();
+			 System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
-			// Handle edge cases that pass, to be improved.
-			if(solver.easyPass(layout, workingList)){
-				System.out.println("true");
-				return;
-			}
 			// Handle edge cases that fail, to be improved
 			if(solver.easyFail(layout, workingList)){
 				System.out.println("false");
