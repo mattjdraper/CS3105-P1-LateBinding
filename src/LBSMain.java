@@ -213,6 +213,9 @@ public class LBSMain {
 					count++;
 				}
 				else{
+					System.out.printf("\nEND LAYOUT: "); layout.print();
+					System.out.printf("\nCURRENT CARD: " + card);
+					System.out.printf("\nSUGGESTED PILE CARD: " + pileCard +"\n");
 					System.out.println("false");
 					return;
 				}

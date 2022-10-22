@@ -18,7 +18,7 @@ public class LBSSolver {
     }
 
     public boolean sameSuit(int card1, int card2, int noRanks){
-        if( card1 / noRanks == card2 / noRanks) {
+        if( (card1-1) / noRanks == (card2-1) / noRanks) {
             return true;
         }
         else {
