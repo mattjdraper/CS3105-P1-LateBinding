@@ -188,32 +188,35 @@ public class LBSMain {
 
 			while (count != movesToWin){
 				int card = workingList.get(0);
-				int cardPosition = layout.cardPosition(card);
-				int pile = workingList.get(1);
-				int pileCard = layout.cardAt(pile);
-
-				// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
-				// Also ensure that the suggested move is one or three piles away.
-				if((solver.sameSuit(card,pileCard,layout.numRanks()) || solver.sameRank(card,pileCard,layout.numRanks()))
-					&& solver.validMove(cardPosition,pile) && solver.validCards(card,cardPosition,pile,pileCard)){
-					// Place the subject card onto the target pile if a valid move.
-					layout.movePiles(pile,card);
-					// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.
-					layout.removePile(cardPosition);
-					// Remove the completed move instructions from the solution queue, next attempted move now scheduled at array positions 0/1
-					workingList.remove(0);
-					workingList.remove(0);
-					// Increment the counter and continue the proposed solution.
-					count++;
-				}
-				else{
+				int pilePosition = workingList.get(1);
+				// Ensure the move submitted has a valid card suggested to move and valid pile index to move to.
+				if(solver.validCards(card,pilePosition,layout)) {
+					int cardPosition = layout.cardPosition(card);
+					int pileCard = layout.cardAt(pilePosition);
+					// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
+					// Also ensure that the suggested move is one or three piles away.
+					if ((solver.sameSuit(card, pileCard, layout.numRanks()) || solver.sameRank(card, pileCard, layout.numRanks()))
+							&& solver.validMove(cardPosition, pilePosition)) {
+						// Place the subject card onto the target pile if a valid move.
+						layout.movePiles(pilePosition, card);
+						// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.
+						layout.removePile(cardPosition);
+						// Remove the completed move instructions from the solution queue, next attempted move now scheduled at array positions 0/1
+						workingList.remove(0);
+						workingList.remove(0);
+						// Increment the counter and continue the proposed solution.
+						count++;
+					} else {
+						System.out.println("false");
+						return;
+					}
+				} else {
 					System.out.println("false");
 					return;
 				}
 			}
 			// All moves of the proposed LBS solution are valid.
 			System.out.println("true");
-
 			stdInScanner.close();
 			return;
 

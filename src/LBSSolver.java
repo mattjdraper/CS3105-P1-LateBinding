@@ -26,7 +26,6 @@ public class LBSSolver {
         }
     }
 
-
     public boolean sameRank(int card1, int card2, int noRanks){
         if (card1 % noRanks == card2 % noRanks) {
             return true;
@@ -35,7 +34,6 @@ public class LBSSolver {
             return false;
         }
     }
-
 
     public boolean validMove(int pile1_location, int pile2_location){
         if(Math.abs(pile1_location - pile2_location) == 1 || Math.abs(pile1_location - pile2_location) == 3){
@@ -46,15 +44,17 @@ public class LBSSolver {
         }
     }
 
-    public boolean validCards(int card, int cardPosition,int pile,int pileCard){
-        if (card < 0 || cardPosition < 0 || pile < 0  || pileCard < 0){
+    public boolean validCards(int card, int pilePostion, LBSLayout layout){
+        if (card < 0 || pilePostion < 0){
+            return false;
+        }
+        else if (card > layout.numSuits()*layout.numRanks() || pilePostion > layout.numPiles()){
             return false;
         }
         else{
             return true;
         }
     }
-
 
     public boolean invalidSetup(LBSLayout startingLayout, ArrayList<Integer> startingList){
         if(startingList.isEmpty() || startingLayout.numPiles() == 0){
