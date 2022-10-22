@@ -64,7 +64,7 @@ public class LBSLayout {
         }
     }
 
-    public ArrayList<Integer> copyLayout() {
+    private ArrayList<Integer> copyLayout() {
          ArrayList<Integer> copy = new  ArrayList<Integer>(0);
          for(int i=0;i<numPiles();i++) { 
              copy.add(cardAt(i));

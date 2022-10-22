@@ -165,33 +165,29 @@ public class LBSMain {
 			solver = new LBSSolver();
 
 			// Temp storage for testing outputs
-			ArrayList<Integer> originalLayout = layout.copyLayout();
-			ArrayList<Integer> originalWorkingList = new ArrayList<>(workingList);
 			System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
 			System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
 			System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
-			System.out.printf("\nLBS LAYOUT: " + originalLayout.toString());
-			System.out.printf("\nPROPOSED SOLUTION: " + originalWorkingList.toString() + "\n");
+			System.out.printf("\nLBS LAYOUT: "); layout.print();
+			System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
 			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
 			int count = 0;
 
-			// Read the first digit of the proposed solution, the stated number of moves to complete
+			// Extract the first digit of the proposed solution, the stated number of moves to complete.
 			int movesToWin = workingList.get(0);
 			workingList.remove(0);
-
-			// Handle edge cases that fail, to be improved
-			if(solver.easyFail(layout, workingList)){
-				System.out.println("false");
-				return;
-			}
 
 			// Handle edge cases that pass, to be improved.
 			if(solver.easyPass(layout, workingList)){
 				System.out.println("true");
 				return;
 			}
-
+			// Handle edge cases that fail, to be improved
+			if(solver.easyFail(layout, workingList)){
+				System.out.println("false");
+				return;
+			}
 
 			while (count != movesToWin){
 
