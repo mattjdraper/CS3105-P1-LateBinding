@@ -160,23 +160,18 @@ public class LBSMain {
 			// [2]:
 			// [3]:
 			// //
+			//
+			// // Dated 21/10/22-22/10/22
 
 			// Instantiate a solver object to access functions regarding the solving of the LBS game
 			solver = new LBSSolver();
 
 			// Temp storage for testing outputs
-			System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
-			System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
-			System.out.printf("\nLBS LAYOUT: "); layout.print();
-			System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
-
-			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
-			int count = 0;
-
-			// Extract the first digit of the proposed solution, the stated number of moves to complete.
-			int movesToWin = workingList.get(0);
-			workingList.remove(0);
+			// System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
+			// System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
+			// System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
+			// System.out.printf("\nLBS LAYOUT: "); layout.print();
+			// System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
 			// Handle edge cases that pass, to be improved.
 			if(solver.easyPass(layout, workingList)){
@@ -189,6 +184,13 @@ public class LBSMain {
 				return;
 			}
 
+			// Store counter of how many moves have been made. Stop reading input after n-1 moves.
+			int count = 0;
+
+			// Extract the first digit of the proposed solution, the stated number of moves to complete.
+			int movesToWin = workingList.get(0);
+			workingList.remove(0);
+
 			while (count != movesToWin){
 
 				int card = workingList.get(0);
@@ -197,7 +199,7 @@ public class LBSMain {
 				int pileCard = layout.cardAt(pile);
 
 				// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
-				// Also ensure that the suggested card to move by solution exists in the game layout. If it does not, cardPosition = -1 invokes failure.
+				// Also ensure that the suggested move is one or three piles away.
 				if((solver.sameSuit(card,pileCard,layout.numRanks()) || solver.sameRank(card,pileCard,layout.numRanks()))
 					&& solver.validMove(cardPosition,pile)){
 					// Place the subject card onto the target pile if a valid move.
