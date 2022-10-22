@@ -71,9 +71,6 @@ public class LBSSolver {
         else if (startingLayout.numPiles() == 1 && startingList.get(0) != 0){
             return true;
         }
-        else if (startingList.size() % 2 != 0){
-            return true;
-        }
         else if (startingList.size() != 2*startingLayout.numPiles()+1){
             return true;
         }
