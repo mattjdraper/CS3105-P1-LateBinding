@@ -7,12 +7,12 @@ import java.lang.Math;
 // // Including methods to determine validity of moves, ...
 //
 
-public class LBSSolver {
+public class LBSChecker {
 
     protected int moves;
     protected ArrayList<Integer> solution;
 
-    public LBSSolver(){
+    public LBSChecker(){
         this.solution = new ArrayList<Integer>(0);
         this.moves = 0;
     }

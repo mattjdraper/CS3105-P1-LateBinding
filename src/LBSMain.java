@@ -77,7 +77,7 @@ public class LBSMain {
 	ArrayList<Integer> workingList;
 
         LBSLayout layout;
-        LBSSolver solver;
+        LBSChecker checker;
 
         int seed ;
         int ranks ;
@@ -132,7 +132,7 @@ public class LBSMain {
 			return;
 
 		case "CHECK":
-
+			// Provided code for reading input of CHECK functionality
 			if (args.length < 2 || 
 			    ( args[1].equals("-") && args.length < 3) || 
 			    ( args[1].equals("-") && args[2].equals("-"))
@@ -163,8 +163,8 @@ public class LBSMain {
 			//
 			// // Dated 21/10/22-22/10/22
 
-			// Instantiate a solver object to access functions regarding the solving of the LBS game
-			solver = new LBSSolver();
+			// Instantiate a checker object to access functions regarding the checking of the LBS solutions
+			checker = new LBSChecker();
 
 			// Temp storage for testing outputs
 			// System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
@@ -174,7 +174,7 @@ public class LBSMain {
 			// System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
 			// Handle edge cases that fail, to be improved
-			if(solver.invalidSetup(layout, workingList) == true){
+			if(checker.invalidSetup(layout, workingList) == true){
 				System.out.println("false");
 				return;
 			}
@@ -191,13 +191,13 @@ public class LBSMain {
 				int card = workingList.get(0);
 				int pilePosition = workingList.get(1);
 				// Ensure the move submitted has a valid card suggested to move and valid pile index to move to.
-				if(solver.validCards(card,pilePosition,layout)) {
+				if(checker.validCards(card,pilePosition,layout)) {
 					int cardPosition = layout.cardPosition(card);
 					int pileCard = layout.cardAt(pilePosition);
 					// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
 					// Also ensure that the suggested move is one or three piles away.
-					if ((solver.sameSuit(card, pileCard, layout.numRanks()) || solver.sameRank(card, pileCard, layout.numRanks()))
-							&& solver.validMove(cardPosition, pilePosition)) {
+					if ((checker.sameSuit(card, pileCard, layout.numRanks()) || checker.sameRank(card, pileCard, layout.numRanks()))
+							&& checker.validMove(cardPosition, pilePosition)) {
 						// Place the subject card onto the target pile if a valid move.
 						layout.movePiles(pilePosition, card);
 						// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.
