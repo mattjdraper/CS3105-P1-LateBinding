@@ -78,6 +78,7 @@ public class LBSMain {
 
         LBSLayout layout;
         LBSChecker checker;
+        LBSSolver solver;
 
         int seed ;
         int ranks ;
@@ -104,6 +105,7 @@ public class LBSMain {
 			return;
 			
 		case "SOLVE":
+			// Provided code for reading input of SOLVE functionality
 			if (args.length<2 || args[1].equals("-")) {
 				layout = new LBSLayout(readIntArray(stdInScanner));
 			}
@@ -111,8 +113,22 @@ public class LBSMain {
 				layout = new LBSLayout(readIntArray(args[1]));
 			}
 
-			// YOUR CODE HERE
+			// 200004184 SOLVE Implementation
+			//
+			// // Given a LBS game layout, find a proposed solution or determine if game is unsolvable
+			//
+			// // REFERENCES:
+			// [1]:
+			// [2]:
+			// [3]:
+			// //
+			//
+			// // Dated 23/10/22-XX/10/22
 
+			// Instantiate a checker object to access functions regarding the checking of the LBS solutions
+			solver = new LBSSolver(layout);
+
+			// End Sequence
 			stdInScanner.close();
 			return;
 
@@ -132,7 +148,7 @@ public class LBSMain {
 			return;
 
 		case "CHECK":
-			// Provided code for reading input of CHECK functionality
+			// Provided code for reading input of CHECK functionality.
 			if (args.length < 2 || 
 			    ( args[1].equals("-") && args.length < 3) || 
 			    ( args[1].equals("-") && args[2].equals("-"))
@@ -153,7 +169,7 @@ public class LBSMain {
 
 			// 200004184 CHECK Implementation
 			//
-			// // Given a LBS game layout, test whether a proposed solution on input stream results in solved game
+			// // Given a LBS game layout, test whether a proposed solution on input stream results in solved game.
 			//
 			// // REFERENCES:
 			// [1]:
