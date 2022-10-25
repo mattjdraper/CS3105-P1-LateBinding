@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -70,7 +71,6 @@ public class LBSMain {
       }
 
 
-
 	public static void main(String[] args) {
 
 	Scanner stdInScanner = new Scanner(System.in);
@@ -85,13 +85,13 @@ public class LBSMain {
         int suits ;
         int numpiles ;
        
-        if(args.length < 1) { printUsage(); return; };
+        if(args.length < 1) { printUsage(); return; }
 
 
-	switch (args[0].toUpperCase()) {
+		switch (args[0].toUpperCase()) {
 
 		case "GEN":
-			if(args.length < 2) { printUsage(); return; };
+			if(args.length < 2) { printUsage(); return; }
 			seed = Integer.parseInt(args[1]);
 			numpiles = (args.length < 3 ? 17 : Integer.parseInt(args[2])) ;
 			ranks = (args.length < 4 ? 13 : Integer.parseInt(args[3])) ;
@@ -118,16 +118,54 @@ public class LBSMain {
 			// // Given a LBS game layout, find a proposed solution or determine if game is unsolvable
 			//
 			// // REFERENCES:
-			// [1]:
-			// [2]:
-			// [3]:
+			// [1]: https://stackoverflow.com/questions/8452672/java-howto-arraylist-push-pop-shift-and-unshift
+			// [2]: https://www.baeldung.com/java-pass-by-value-or-pass-by-reference
+			// [3]: https://javarevisited.blogspot.com/2011/02/how-hashmap-works-in-java.html#axzz7igW7lWWg
+			// [4]: https://stackoverflow.com/questions/5805602/how-to-sort-list-of-objects-by-some-property
 			// //
 			//
-			// // Dated 23/10/22-XX/10/22
+			// // Dated 23/10/22-25/10/22
 
 			// Instantiate a checker object to access functions regarding the checking of the LBS solutions
 			solver = new LBSSolver(layout);
 
+			// Create an initial state object from the user provided game of accordion.
+			LBSState initial_state = new LBSState(layout);
+
+			// Construct a storage list of ordered States to expand in DFS until solution found or list becomes empty.
+			ArrayList<LBSState> searchStates = new ArrayList<>();
+			searchStates.add(initial_state);
+
+			// Create flag variable that sets to true and terminates DFS if a solution state is reached.
+			boolean solutionFound = false;
+
+			// Conduct DFS on Late Binding Solitaire game as specified in L04-Search-1 Slides 31-32.
+			// Order of State expansion determined by Heuristic specified in LBSState.generateHeuristic()
+			while(solutionFound == false && !searchStates.isEmpty()){
+				// The first state in the queue has the highest Heuristic and deemed most likely to yield a solution.
+				// Remove this state from front of queue and expand it by Depth First Search.
+				LBSState bestState = searchStates.remove(searchStates.size()-1);
+				bestState.print();
+				ArrayList<LBSState> newStates = solver.DFS_Expand(bestState);
+				// Test whether a solution has been found within this expansion (is there a move from parent state that yields solution?)
+				solutionFound = solver.getSolutionFound();
+				// If solution not found, add the new states maintaining heuristic order to queue.
+				searchStates.addAll(newStates);
+				//searchStates = solver.orderStates(searchStates,newStates);
+			}
+
+			// Depth First Search ended.
+			// // If this was due to a solution being found, form appropriate output.
+			// // Otherwise, form the accepted output for the problem being deemed unsolvable.
+			if(solutionFound){
+				System.out.println(solver.getMovesToWin());
+				System.out.println("\nSOLUTION FOUND");
+				System.out.println(solver.getFinalSolution());
+			}
+			else{
+				System.out.println("-1");
+				System.out.println("\nNO SOLUTION");
+			}
 			// End Sequence
 			stdInScanner.close();
 			return;
@@ -153,7 +191,7 @@ public class LBSMain {
 			    ( args[1].equals("-") && args.length < 3) || 
 			    ( args[1].equals("-") && args[2].equals("-"))
 			   ) 
-			{ printUsage(); return; };
+			{ printUsage(); return; }
 			if (args[1].equals("-")) {
 				layout = new LBSLayout(readIntArray(stdInScanner));
 			}
@@ -171,23 +209,10 @@ public class LBSMain {
 			//
 			// // Given a LBS game layout, test whether a proposed solution on input stream results in solved game.
 			//
-			// // REFERENCES:
-			// [1]:
-			// [2]:
-			// [3]:
-			// //
-			//
 			// // Dated 21/10/22-22/10/22
 
 			// Instantiate a checker object to access functions regarding the checking of the LBS solutions
 			checker = new LBSChecker();
-
-			// Temp storage for testing outputs
-			// System.out.printf("\nRANKS: " + Integer.toString(layout.numRanks()));
-			// System.out.printf("\nSUITS: " + Integer.toString(layout.numSuits()));
-			// System.out.printf("\nNUMBER PILES: " + Integer.toString(layout.numPiles()));
-			// System.out.printf("\nLBS LAYOUT: "); layout.print();
-			// System.out.printf("\nPROPOSED SOLUTION: " + workingList.toString() + "\n");
 
 			// Handle edge cases that fail, to be improved
 			if(checker.invalidSetup(layout, workingList) == true){
@@ -204,23 +229,31 @@ public class LBSMain {
 
 
 			while (count != movesToWin){
+
 				int card = workingList.get(0);
 				int pilePosition = workingList.get(1);
+
 				// Ensure the move submitted has a valid card suggested to move and valid pile index to move to.
 				if(checker.validCards(card,pilePosition,layout)) {
+
 					int cardPosition = layout.cardPosition(card);
 					int pileCard = layout.cardAt(pilePosition);
+
 					// Test if a valid move, if so then rearrange the piles and repeat procedure until finished or failure.
 					// Also ensure that the suggested move is one or three piles away.
 					if ((checker.sameSuit(card, pileCard, layout.numRanks()) || checker.sameRank(card, pileCard, layout.numRanks()))
 							&& checker.validMove(cardPosition, pilePosition)) {
+
 						// Place the subject card onto the target pile if a valid move.
 						layout.movePiles(pilePosition, card);
+
 						// Remove the transferred pile from the game layout, shuffling all other piles one closer to the start.
 						layout.removePile(cardPosition);
+
 						// Remove the completed move instructions from the solution queue, next attempted move now scheduled at array positions 0/1
 						workingList.remove(0);
 						workingList.remove(0);
+
 						// Increment the counter and continue the proposed solution.
 						count++;
 					} else {
@@ -231,6 +264,7 @@ public class LBSMain {
 					System.out.println("false");
 					return;
 				}
+
 			}
 			// All moves of the proposed LBS solution are valid.
 			System.out.println("true");
@@ -244,7 +278,7 @@ public class LBSMain {
 			    ( args[1].equals("-") && args.length < 3) || 
 			    ( args[1].equals("-") && args[2].equals("-"))
 			   ) 
-			   { printUsage(); return; };
+			   { printUsage(); return; }
 			if (args[1].equals("-")) {
 				layout = new LBSLayout(readIntArray(stdInScanner));
 			}
@@ -264,8 +298,7 @@ public class LBSMain {
 			return;
 
 		default : 
-			printUsage(); 
-			return;
+			printUsage();
 
 		}
 

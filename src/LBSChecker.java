@@ -64,7 +64,7 @@ public class LBSChecker {
         if (card < 0 || pilePostion < 0){
             return false;
         }
-        else if (card > layout.numSuits()*layout.numRanks() || pilePostion > layout.numPiles()){
+        else if (card > layout.cardsInDeck()|| pilePostion > layout.numPiles()){
             return false;
         }
         else{

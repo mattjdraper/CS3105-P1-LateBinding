@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CS3105-P1-LateBinding.iml" filepath="$PROJECT_DIR$/.idea/CS3105-P1-LateBinding.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CS3105-P1-LateBinding.iml" filepath="$PROJECT_DIR$/CS3105-P1-LateBinding.iml" />
     </modules>
   </component>
 </project>
