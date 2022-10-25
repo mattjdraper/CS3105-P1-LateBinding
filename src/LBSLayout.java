@@ -170,13 +170,13 @@ public class LBSLayout {
 
     // 200004184 LBSLayout Adaptation
     //
-    // Only addition to LBSLayout is getDeck()
+    // Only addition to LBSLayout is getGameLayout()
     // // Tried to avoid this across entirety of project but gave in as it was required for solver.seenStateTest()
     // // In testing if layout has been seen before as opposed to a Hashed LBSLayout type, I save invoking the expensive
     // // operation of generateHeuristic() for a newly generated state.
     //
     // // Dated 24/10/22
-    public ArrayList<Integer> getDeck(){
+    public ArrayList<Integer> getGameLayout(){
         return layout;
     }
 

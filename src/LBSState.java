@@ -7,12 +7,10 @@ import java.util.*;
 //
 
 
-public class LBSState implements Comparable<LBSState>{
+public class LBSState {
     protected LBSLayout layout;
     protected ArrayList<Integer> solutionSoFar;
-
     protected int movesLeft;
-    protected double heuristic;
 
 
     // LBSState() - Standard Constructor for LBSSolver.
@@ -21,7 +19,6 @@ public class LBSState implements Comparable<LBSState>{
         this.layout = layout;
         this.solutionSoFar = new ArrayList<>();
         this.movesLeft = layout.numPiles();
-        this.heuristic = determineHeuristic(layout, this.movesLeft);
     }
 
     // LBSState() - Standard Constructor for LBSSolver.
@@ -32,62 +29,18 @@ public class LBSState implements Comparable<LBSState>{
         this.layout = solver.completeMove(parentLayout,card,pile);
         this.solutionSoFar = solver.updateSolution(solution,card,pile);
         this.movesLeft = layout.numPiles()-1;
-        this.heuristic = determineHeuristic(layout, this.movesLeft);
     }
 
     public ArrayList<Integer> getSolutionSoFar() {
         return solutionSoFar;
     }
 
-    public double getHeuristic(){
-        return heuristic;
-    }
-
     public LBSLayout getLayout(){
         return layout;
-    }
-
-    public double determineHeuristic(LBSLayout layout, int movesLeft){
-
-        LBSChecker checker = new LBSChecker();
-        int movesAvailable = 0;
-
-        for(int position = layout.numPiles()-1; position > 0; position--){
-            int card = layout.cardAt(position);
-            try{
-                int oneAhead = layout.cardAt(position-1);
-                if(checker.sameSuit(card,oneAhead, layout.numRanks()) || checker.sameRank(card,oneAhead, layout.numRanks())){
-                    movesAvailable++;
-                }
-            } catch(Exception e){}
-            try{
-                int threeAhead = layout.cardAt(position-3);
-                if(checker.sameSuit(card,threeAhead, layout.numRanks()) || checker.sameRank(card,threeAhead, layout.numRanks())){
-                    movesAvailable++;
-                }
-            } catch(Exception e){}
-        }
-        double heuristic = (double) movesAvailable/movesLeft;
-        return(heuristic);
-    }
-
-    // compareTo() - comparator override for solver.OrderStates()
-    // Determines ordering of two states determined by their heuristic.
-    // REFERENCES:
-    // [1] https://stackoverflow.com/questions/5805602/how-to-sort-list-of-objects-by-some-property
-    public int compareTo(LBSState state) {
-        if (Math.abs(1- this.heuristic) > Math.abs(1-state.heuristic)) {
-            return 1;
-        } else if (Math.abs(this.heuristic) < Math.abs(state.heuristic)) {
-            return -1;
-        } else {
-            return 0;
-        }
     }
 
     public void print(){
         System.out.printf("\nLAYOUT: "); layout.print();
         System.out.printf("SOLUTION: " + solutionSoFar.toString());
-        System.out.printf("\nHEURISTIC: " + heuristic + "\n");
     }
 }

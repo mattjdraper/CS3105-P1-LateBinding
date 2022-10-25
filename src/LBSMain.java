@@ -3,6 +3,7 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Stack;
 
 // Starter by Ian Gent, Oct 2022
 //
@@ -133,38 +134,32 @@ public class LBSMain {
 			LBSState initial_state = new LBSState(layout);
 
 			// Construct a storage list of ordered States to expand in DFS until solution found or list becomes empty.
-			ArrayList<LBSState> searchStates = new ArrayList<>();
-			searchStates.add(initial_state);
+			Stack<LBSState> searchStates = new Stack<>();
+			searchStates.push(initial_state);
 
 			// Create flag variable that sets to true and terminates DFS if a solution state is reached.
-			boolean solutionFound = false;
+			// // Initialize this flag by testing if the submitted game is in fact a one pile solution.
+			boolean solutionFound = solver.solutionTest(initial_state);
 
 			// Conduct DFS on Late Binding Solitaire game as specified in L04-Search-1 Slides 31-32.
-			// Order of State expansion determined by Heuristic specified in LBSState.generateHeuristic()
 			while(solutionFound == false && !searchStates.isEmpty()){
-				// The first state in the queue has the highest Heuristic and deemed most likely to yield a solution.
-				// Remove this state from front of queue and expand it by Depth First Search.
-				LBSState bestState = searchStates.remove(searchStates.size()-1);
-				bestState.print();
-				ArrayList<LBSState> newStates = solver.DFS_Expand(bestState);
-				// Test whether a solution has been found within this expansion (is there a move from parent state that yields solution?)
-				solutionFound = solver.getSolutionFound();
-				// If solution not found, add the new states maintaining heuristic order to queue.
-				searchStates.addAll(newStates);
-				//searchStates = solver.orderStates(searchStates,newStates);
-			}
 
+				LBSState bestState = searchStates.pop();
+
+				ArrayList<LBSState> newStates = solver.DFS_Expand(bestState);
+
+				solutionFound = solver.getSolutionFound();
+
+				searchStates.addAll(newStates);
+			}
 			// Depth First Search ended.
 			// // If this was due to a solution being found, form appropriate output.
 			// // Otherwise, form the accepted output for the problem being deemed unsolvable.
 			if(solutionFound){
-				System.out.println(solver.getMovesToWin());
-				System.out.println("\nSOLUTION FOUND");
 				System.out.println(solver.getFinalSolution());
 			}
 			else{
 				System.out.println("-1");
-				System.out.println("\nNO SOLUTION");
 			}
 			// End Sequence
 			stdInScanner.close();
