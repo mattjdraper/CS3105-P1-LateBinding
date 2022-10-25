@@ -30,11 +30,6 @@ public class LBSSolver {
 
     }
 
-    // getMovesToWin() - returns movesToWin variable.
-    public int getMovesToWin(){
-        return movesToWin;
-    }
-
     // getSolutionFound() - returns the solutionFound variable.
     public boolean getSolutionFound(){
         return solutionFound;
@@ -75,7 +70,7 @@ public class LBSSolver {
                     // // Tried to avoid this, but ultimately it had to stay to get the algorithm to work.
                     LBSLayout layoutCopy = new LBSLayout(parentLayout);
                     // Create a new state for the search space.
-                    LBSState newState = new LBSState(state, layoutCopy, card, position-1);
+                    LBSState newState = new LBSState(state, layoutCopy, card, position-1, state.getSavingGrace());
                     if(!seenStates.contains(newState.getLayout().getGameLayout())) {
 
                         newStates.add(newState);
@@ -98,7 +93,7 @@ public class LBSSolver {
                 int threeAhead = parentLayout.cardAt(position-3);
                 if(checker.sameSuit(card,threeAhead, parentLayout.numRanks()) || checker.sameRank(card,threeAhead, parentLayout.numRanks())){
                     LBSLayout layoutCopy = new LBSLayout(parentLayout);
-                    LBSState newState = new LBSState(state, layoutCopy, card, position-3);
+                    LBSState newState = new LBSState(state, layoutCopy, card, position-3, state.getSavingGrace());
                     if(!seenStates.contains(newState.getLayout().getGameLayout())) {
 
                         newStates.add(newState);
@@ -115,6 +110,52 @@ public class LBSSolver {
         }
         // The parent state is fully expanded generating new states for all enactable moves on the layout.
         // Return a list of these new states.
+        return newStates;
+    }
+
+    // DFS_Expand_SG() - Expand a given game state within Depth First Search Algorithm with Saving Grace available.
+    // - code directly copied from DFS_Expand() except where annotated to implement SG.
+    public ArrayList<LBSState> DFS_Expand_SG(LBSState state){
+
+        LBSChecker checker = new LBSChecker();
+
+        LBSLayout parentLayout = state.getLayout();
+
+        ArrayList<LBSState> newStates = new ArrayList<>();
+
+        for(int position = parentLayout.numPiles()-1; position > 0; position--){
+
+            int card = parentLayout.cardAt(position);
+
+            try{
+                // Saving Grace move to pile-1
+                LBSLayout layoutCopy = new LBSLayout(parentLayout);
+                LBSState newState = new LBSState(state, layoutCopy, card, position-1, true);
+                if(!seenStates.contains(newState.getLayout().getGameLayout())) {
+                    newStates.add(newState);
+                    seenStates.add(newState.getLayout().getGameLayout());
+                    solutionFound = solutionTest(newState);
+                    if (solutionFound) {
+                        break;
+                    }
+                }
+            } catch(Exception e){}
+
+            try{
+                // Saving Grace move to pile-3
+                LBSLayout layoutCopy = new LBSLayout(parentLayout);
+                LBSState newState = new LBSState(state, layoutCopy, card, position-3, true);
+                if(!seenStates.contains(newState.getLayout().getGameLayout())) {
+                    newStates.add(newState);
+                    seenStates.add(newState.getLayout().getGameLayout());
+                    solutionFound = solutionTest(newState);
+                    if (solutionFound) {
+                        break;
+                    }
+                }
+            } catch(Exception e){}
+        }
+
         return newStates;
     }
 

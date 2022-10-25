@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -142,11 +141,12 @@ public class LBSMain {
 			boolean solutionFound = solver.solutionTest(initial_state);
 
 			// Conduct DFS on Late Binding Solitaire game as specified in L04-Search-1 Slides 31-32.
-			while(solutionFound == false && !searchStates.isEmpty()){
+			while(!solutionFound && !searchStates.isEmpty()){
+				ArrayList<LBSState> newStates;
 
 				LBSState bestState = searchStates.pop();
 
-				ArrayList<LBSState> newStates = solver.DFS_Expand(bestState);
+				newStates = solver.DFS_Expand(bestState);
 
 				solutionFound = solver.getSolutionFound();
 
@@ -168,15 +168,56 @@ public class LBSMain {
 		case "GRACESOLVE":
 
 		case "SOLVEGRACE":
+			// Provided code for reading input of SOLVEGRACE functionality.
 			if (args.length<2 || args[1].equals("-")) {
 				layout = new LBSLayout(readIntArray(stdInScanner));
 			}
 			else { 
 				layout = new LBSLayout(readIntArray(args[1]));
 			}
-			
-			// YOUR CODE HERE
 
+			// 200004184 GRACESOLVE Implementation
+			//
+			// // Given a LBS game layout, find a proposed solution or determine if game is unsolvable with Saving Grace.
+			//
+			// // Dated 25/10/22
+
+			// Code directly copied from SOLVE functionality except where annotated to implement Saving Grace.
+
+			solver = new LBSSolver(layout);
+
+			LBSState initial_state_SG = new LBSState(layout);
+
+			Stack<LBSState> searchStates_SG = new Stack<>();
+			searchStates_SG.push(initial_state_SG);
+
+			boolean solutionFound_SG = solver.solutionTest(initial_state_SG);
+
+			while(!solutionFound_SG && !searchStates_SG.isEmpty()){
+
+				LBSState bestState = searchStates_SG.pop();
+				//bestState.print();
+
+				ArrayList<LBSState> newStates = solver.DFS_Expand(bestState);
+
+				if(newStates.isEmpty() && !bestState.getSavingGrace()){
+					newStates = solver.DFS_Expand_SG(bestState);
+				}
+
+				solutionFound_SG = solver.getSolutionFound();
+
+				searchStates_SG.addAll(newStates);
+			}
+			// Depth First Search ended.
+			// // If this was due to a solution being found, form appropriate output.
+			// // Otherwise, form the accepted output for the problem being deemed unsolvable.
+			if(solutionFound_SG){
+				System.out.println(solver.getFinalSolution());
+			}
+			else{
+				System.out.println("-1");
+			}
+			// End Sequence
 			stdInScanner.close();
 			return;
 
@@ -210,7 +251,7 @@ public class LBSMain {
 			checker = new LBSChecker();
 
 			// Handle edge cases that fail, to be improved
-			if(checker.invalidSetup(layout, workingList) == true){
+			if(checker.invalidSetup(layout, workingList)){
 				System.out.println("false");
 				return;
 			}
@@ -269,6 +310,7 @@ public class LBSMain {
 		case "GRACECHECK":
 
 		case "CHECKGRACE":
+			// Provided code for reading input of CHECKGRACE functionality.
 			if (args.length < 2 || 
 			    ( args[1].equals("-") && args.length < 3) || 
 			    ( args[1].equals("-") && args[2].equals("-"))
@@ -286,9 +328,72 @@ public class LBSMain {
 			else { 
 				workingList = readIntArray(args[2]);
 			}
+			// 200004184 CHECKGRACE Implementation
+			//
+			// // Given a LBS game layout, test whether a proposed solution on input stream results in solved game with a saving grace.
+			//
+			// // Dated 25/10/22
 
-			// YOUR CODE HERE
-                        
+			// Code directly copied from CHECK functionality except where annotated to implement Saving Grace.
+
+			checker = new LBSChecker();
+
+			if(checker.invalidSetup(layout, workingList)){
+				System.out.println("false");
+				return;
+			}
+
+			// Relabelling of a few vars required due to shared local scope with CHECK.
+			int graceCount = 0;
+			int graceMovesToWin = workingList.get(0);
+			workingList.remove(0);
+
+			// Create flag variable to mark whether the proposed solution has used it's saving grace yet.
+			boolean savingGrace = false;
+
+			while (graceCount != graceMovesToWin) {
+
+				int card = workingList.get(0);
+				int pilePosition = workingList.get(1);
+
+				if (checker.validCards(card, pilePosition, layout)) {
+
+					int cardPosition = layout.cardPosition(card);
+					int pileCard = layout.cardAt(pilePosition);
+
+					if ((checker.sameSuit(card, pileCard, layout.numRanks()) || checker.sameRank(card, pileCard, layout.numRanks()))
+							&& checker.validMove(cardPosition, pilePosition)) {
+						// Place the subject card onto the target pile if a valid move.
+						layout.movePiles(pilePosition, card);
+
+						layout.removePile(cardPosition);
+
+						workingList.remove(0);
+						workingList.remove(0);
+
+						// Increment the counter and continue the proposed solution.
+						graceCount++;
+					} else if (!savingGrace && checker.validMove(cardPosition, pilePosition)) {
+						layout.movePiles(pilePosition, card);
+						layout.removePile(cardPosition);
+
+						workingList.remove(0);
+						workingList.remove(0);
+
+						graceCount++;
+
+						savingGrace = true;
+					} else {
+						System.out.println("false");
+						return;
+					}
+				}
+				else {
+					System.out.println("false");
+					return;
+				}
+			}
+			System.out.println("true");
 			stdInScanner.close();
 			return;
 

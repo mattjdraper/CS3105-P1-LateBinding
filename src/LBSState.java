@@ -12,6 +12,8 @@ public class LBSState {
     protected ArrayList<Integer> solutionSoFar;
     protected int movesLeft;
 
+    protected boolean savingGrace;
+
 
     // LBSState() - Standard Constructor for LBSSolver.
     // For initializing the DFS, this creates state zero, the state correspondent to the game without any moves made.
@@ -19,17 +21,21 @@ public class LBSState {
         this.layout = layout;
         this.solutionSoFar = new ArrayList<>();
         this.movesLeft = layout.numPiles();
+        this.savingGrace = false;
     }
 
-    // LBSState() - Standard Constructor for LBSSolver.
+    // LBSState() - Override Constructor for LBSSolver.
     // For creating any search state that is not the original game.
-    public LBSState(LBSState parentState, LBSLayout parentLayout, int card, int pile){
+    public LBSState(LBSState parentState, LBSLayout parentLayout, int card, int pile, boolean savingGrace){
         LBSSolver solver = new LBSSolver(parentLayout);
-        ArrayList<Integer> solution = new ArrayList<Integer>(parentState.getSolutionSoFar());
+        ArrayList<Integer> solution = new ArrayList<>(parentState.getSolutionSoFar());
         this.layout = solver.completeMove(parentLayout,card,pile);
         this.solutionSoFar = solver.updateSolution(solution,card,pile);
         this.movesLeft = layout.numPiles()-1;
+        this.savingGrace = savingGrace;
     }
+
+    public boolean getSavingGrace(){return savingGrace;}
 
     public ArrayList<Integer> getSolutionSoFar() {
         return solutionSoFar;
@@ -40,7 +46,8 @@ public class LBSState {
     }
 
     public void print(){
-        System.out.printf("\nLAYOUT: "); layout.print();
+        System.out.print("\nLAYOUT: "); layout.print();
         System.out.printf("SOLUTION: " + solutionSoFar.toString());
+        System.out.printf("\nSAVING GRACE?: " + savingGrace + "\n");
     }
 }
