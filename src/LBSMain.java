@@ -3,6 +3,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 // Starter by Ian Gent, Oct 2022
 //
@@ -185,41 +186,70 @@ public class LBSMain {
 			// Code directly copied from SOLVE functionality except where annotated to implement Saving Grace.
 
 			solver = new LBSSolver(layout);
+			boolean solutionFoundSG = solver.getSolutionFound();
 
 			LBSState initialStateSG = new LBSState(layout);
-
 			Stack<LBSState> searchStatesSG = new Stack<>();
+			Stack<LBSState> visitedStatesSG = new Stack<>();
+			Stack<LBSState> allSavingGraceStates = new Stack<>();
 			searchStatesSG.push(initialStateSG);
 
-			boolean solutionFoundSG = solver.solutionTest(initialStateSG);
 
+			// Attempt to Solve by standard LBSMain SOLVE.
 			while(!solutionFoundSG && !searchStatesSG.isEmpty()){
 
 				LBSState currentState = searchStatesSG.pop();
-				//bestState.print();
+
+				visitedStatesSG.push(currentState);
 
 				ArrayList<LBSState> newStates = solver.DFS_Expand(currentState);
-
-				if((newStates.isEmpty() && !currentState.getSavingGrace())){
-					newStates = solver.SG_Expand(currentState);
-				}
 
 				solutionFoundSG = solver.getSolutionFound();
 
 				searchStatesSG.addAll(newStates);
 			}
-			// Depth First Search ended.
-			// // If this was due to a solution being found, form appropriate output.
-			// // Otherwise, form the accepted output for the problem being deemed unsolvable.
+			// Check if standard solve yielded a solution.
 			if(solutionFoundSG){
 				System.out.println(solver.getFinalSolution());
+				stdInScanner.close();
+				return;
+			}
+
+			// Play Saving Grace on all games generated. This is all possible saving grace games.
+			for(LBSState visitedState : visitedStatesSG){
+				allSavingGraceStates.addAll(solver.SG_Expand(visitedState));
+				solutionFoundSG = solver.getSolutionFound();
+				if(solutionFoundSG){
+					System.out.println(solver.getFinalSolution());
+					stdInScanner.close();
+					return;
+				}
+			}
+
+			// Standard Solve Algorithm on set of saving grace states.
+			while(!solutionFoundSG && !allSavingGraceStates.isEmpty()){
+
+				LBSState currentState = allSavingGraceStates.pop();
+				currentState.print();
+
+				ArrayList<LBSState> newStates = solver.DFS_Expand(currentState);
+
+				solutionFoundSG = solver.getSolutionFound();
+
+				allSavingGraceStates.addAll(newStates);
+			}
+			// Check if standard solve yielded a solution.
+			if(solutionFoundSG){
+				System.out.println(solver.getFinalSolution());
+				stdInScanner.close();
+				return;
 			}
 			else{
 				System.out.println("-1");
+				stdInScanner.close();
+				return;
 			}
-			// End Sequence
-			stdInScanner.close();
-			return;
+
 
 		case "CHECK":
 			// Provided code for reading input of CHECK functionality.
