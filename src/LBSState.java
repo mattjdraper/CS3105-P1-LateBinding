@@ -7,7 +7,7 @@ import java.util.*;
 //
 
 
-public class LBSState {
+public class LBSState implements Comparable<LBSState>{
     protected LBSLayout layout;
     protected ArrayList<Integer> solutionSoFar;
     protected int movesLeft;
@@ -49,5 +49,10 @@ public class LBSState {
         System.out.print("\nLAYOUT: "); layout.print();
         System.out.printf("SOLUTION: " + solutionSoFar.toString());
         System.out.printf("\nSAVING GRACE?: " + savingGrace + "\n");
+    }
+
+    @Override
+    public int compareTo(LBSState otherState){
+        return Integer.compare(getLayout().numPiles(), otherState.getLayout().numPiles());
     }
 }

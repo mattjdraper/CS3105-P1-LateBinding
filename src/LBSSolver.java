@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 // LBSSolver by 200004184, 23/10/2022-XX/10/2022
 //
@@ -14,8 +11,7 @@ public class LBSSolver {
     protected int movesToWin;
     protected boolean solutionFound;
     protected LBSLayout startingLayout;
-
-    protected ArrayList<ArrayList<Integer>> seenStates;
+    protected HashSet<ArrayList<Integer>> seenStates;
     protected String finalSolution;
 
 
@@ -25,7 +21,7 @@ public class LBSSolver {
         this.movesToWin = layout.numPiles()-1;
         this.solutionFound = false;
         this.startingLayout = layout;
-        this.seenStates  = new ArrayList<>();
+        this.seenStates  = new HashSet<>();
         this.finalSolution = null;
 
     }
@@ -43,7 +39,7 @@ public class LBSSolver {
     // - Create a new state for every possible move you can perform on said layout. Implemented iteratively.
     // - Return ArrayList containing all new states generated from single moves on the parent game.
     public ArrayList<LBSState> DFS_Expand(LBSState state){
-        
+
         // Instantiate an LBSChecker for access to move validity functions.
         LBSChecker checker = new LBSChecker();
         // Create copy of the parent state's layout to pass by value into potential new state constructors.
@@ -115,7 +111,7 @@ public class LBSSolver {
 
     // DFS_Expand_SG() - Expand a given game state within Depth First Search Algorithm with Saving Grace available.
     // - code directly copied from DFS_Expand() except where annotated to implement SG.
-    public ArrayList<LBSState> SG_Expand(LBSState state){
+    public ArrayList<LBSState> SG_Expand(LBSState state) {
 
         LBSChecker checker = new LBSChecker();
 
@@ -123,39 +119,73 @@ public class LBSSolver {
 
         ArrayList<LBSState> newStates = new ArrayList<>();
 
-        for(int position = parentLayout.numPiles()-1; position > 0; position--){
+        for (int position = parentLayout.numPiles() - 1; position > 0; position--) {
 
             int card = parentLayout.cardAt(position);
 
-            try{
-                // Saving Grace move to pile-1
-                LBSLayout layoutCopy = new LBSLayout(parentLayout);
-                LBSState newState = new LBSState(state, layoutCopy, card, position-1, true);
-                if(!seenStates.contains(newState.getLayout().getGameLayout())) {
-                    newStates.add(newState);
-                    seenStates.add(newState.getLayout().getGameLayout());
-                    solutionFound = solutionTest(newState);
-                    if (solutionFound) {
-                        break;
-                    }
-                }
-            } catch(Exception e){}
+            // Standard Move 1 left
+            try {
+                int oneAhead = parentLayout.cardAt(position - 1);
+                if (checker.sameSuit(card, oneAhead, parentLayout.numRanks()) || checker.sameRank(card, oneAhead, parentLayout.numRanks())) {
 
-            try{
-                // Saving Grace move to pile-3
-                LBSLayout layoutCopy = new LBSLayout(parentLayout);
-                LBSState newState = new LBSState(state, layoutCopy, card, position-3, true);
-                if(!seenStates.contains(newState.getLayout().getGameLayout())) {
-                    newStates.add(newState);
-                    seenStates.add(newState.getLayout().getGameLayout());
-                    solutionFound = solutionTest(newState);
-                    if (solutionFound) {
-                        break;
+                    LBSLayout layoutCopy = new LBSLayout(parentLayout);
+
+                    LBSState newState = new LBSState(state, layoutCopy, card, position - 1, state.getSavingGrace());
+                    if (!seenStates.contains(newState.getLayout().getGameLayout())) {
+
+                        newStates.add(newState);
+
+                        seenStates.add(newState.getLayout().getGameLayout());
+
+                        solutionFound = solutionTest(newState);
+                        if (solutionFound) {
+                            break;
+                        }
                     }
                 }
-            } catch(Exception e){}
+            } catch (Exception e) {}
+
+            // Standard Move 3 left
+            try {
+                int threeAhead = parentLayout.cardAt(position - 3);
+                if (checker.sameSuit(card, threeAhead, parentLayout.numRanks()) || checker.sameRank(card, threeAhead, parentLayout.numRanks())) {
+                    LBSLayout layoutCopy = new LBSLayout(parentLayout);
+                    LBSState newState = new LBSState(state, layoutCopy, card, position - 3, state.getSavingGrace());
+                    if (!seenStates.contains(newState.getLayout().getGameLayout())) {
+
+                        newStates.add(newState);
+
+                        seenStates.add(newState.getLayout().getGameLayout());
+
+                        solutionFound = solutionTest(newState);
+                        if (solutionFound) {
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {}
+
+            // Saving Grace Move
+            try {
+                if (!state.getSavingGrace()) {
+
+                    LBSLayout layoutCopy = new LBSLayout(parentLayout);
+
+                    LBSState newState = new LBSState(state, layoutCopy, card, 0, true);
+                    if (!seenStates.contains(newState.getLayout().getGameLayout())) {
+
+                        newStates.add(newState);
+
+                        seenStates.add(newState.getLayout().getGameLayout());
+
+                        solutionFound = solutionTest(newState);
+                        if (solutionFound) {
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {}
         }
-
         return newStates;
     }
 
