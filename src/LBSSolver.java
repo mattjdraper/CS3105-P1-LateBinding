@@ -115,7 +115,7 @@ public class LBSSolver {
 
     // DFS_Expand_SG() - Expand a given game state within Depth First Search Algorithm with Saving Grace available.
     // - code directly copied from DFS_Expand() except where annotated to implement SG.
-    public ArrayList<LBSState> DFS_Expand_SG(LBSState state){
+    public ArrayList<LBSState> SG_Expand(LBSState state){
 
         LBSChecker checker = new LBSChecker();
 

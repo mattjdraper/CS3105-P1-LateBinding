@@ -130,23 +130,23 @@ public class LBSMain {
 			solver = new LBSSolver(layout);
 
 			// Create an initial state object from the user provided game of accordion.
-			LBSState initial_state = new LBSState(layout);
+			LBSState initialState = new LBSState(layout);
 
 			// Construct a storage list of ordered States to expand in DFS until solution found or list becomes empty.
 			Stack<LBSState> searchStates = new Stack<>();
-			searchStates.push(initial_state);
+			searchStates.push(initialState);
 
 			// Create flag variable that sets to true and terminates DFS if a solution state is reached.
 			// // Initialize this flag by testing if the submitted game is in fact a one pile solution.
-			boolean solutionFound = solver.solutionTest(initial_state);
+			boolean solutionFound = solver.solutionTest(initialState);
 
 			// Conduct DFS on Late Binding Solitaire game as specified in L04-Search-1 Slides 31-32.
 			while(!solutionFound && !searchStates.isEmpty()){
 				ArrayList<LBSState> newStates;
 
-				LBSState bestState = searchStates.pop();
+				LBSState currentState = searchStates.pop();
 
-				newStates = solver.DFS_Expand(bestState);
+				newStates = solver.DFS_Expand(currentState);
 
 				solutionFound = solver.getSolutionFound();
 
@@ -186,32 +186,32 @@ public class LBSMain {
 
 			solver = new LBSSolver(layout);
 
-			LBSState initial_state_SG = new LBSState(layout);
+			LBSState initialStateSG = new LBSState(layout);
 
-			Stack<LBSState> searchStates_SG = new Stack<>();
-			searchStates_SG.push(initial_state_SG);
+			Stack<LBSState> searchStatesSG = new Stack<>();
+			searchStatesSG.push(initialStateSG);
 
-			boolean solutionFound_SG = solver.solutionTest(initial_state_SG);
+			boolean solutionFoundSG = solver.solutionTest(initialStateSG);
 
-			while(!solutionFound_SG && !searchStates_SG.isEmpty()){
+			while(!solutionFoundSG && !searchStatesSG.isEmpty()){
 
-				LBSState bestState = searchStates_SG.pop();
+				LBSState currentState = searchStatesSG.pop();
 				//bestState.print();
 
-				ArrayList<LBSState> newStates = solver.DFS_Expand(bestState);
+				ArrayList<LBSState> newStates = solver.DFS_Expand(currentState);
 
-				if(newStates.isEmpty() && !bestState.getSavingGrace()){
-					newStates = solver.DFS_Expand_SG(bestState);
+				if((newStates.isEmpty() && !currentState.getSavingGrace())){
+					newStates = solver.SG_Expand(currentState);
 				}
 
-				solutionFound_SG = solver.getSolutionFound();
+				solutionFoundSG = solver.getSolutionFound();
 
-				searchStates_SG.addAll(newStates);
+				searchStatesSG.addAll(newStates);
 			}
 			// Depth First Search ended.
 			// // If this was due to a solution being found, form appropriate output.
 			// // Otherwise, form the accepted output for the problem being deemed unsolvable.
-			if(solutionFound_SG){
+			if(solutionFoundSG){
 				System.out.println(solver.getFinalSolution());
 			}
 			else{
